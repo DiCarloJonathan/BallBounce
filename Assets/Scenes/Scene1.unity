@@ -428,7 +428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   horizontal: 2
-  virtical: 1
+  virticle: 1
   speed: 3
 --- !u!23 &1892138381
 MeshRenderer:
