@@ -5,18 +5,22 @@ public class SpawnBall : MonoBehaviour {
 
 	public GameObject ball;
 
-	public static bool reset = false;
-
+	public static bool reset = true;
+	Vector3 location;
+	PaddleScript paddle;
 	// Use this for initialization
 	void Start () {
-		Instantiate(ball ,Vector3.zero, Quaternion.identity);
+		paddle = PaddleScript.main;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (reset == true) {
-			//DestroyImmediate (ball,true);
-			Instantiate(ball ,Vector3.zero, Quaternion.identity);
+			if (paddle.moving == true)
+				location = new Vector3((paddle.transform.position.x + paddle.delta.x), ((ball.transform.localScale.y * .5f) + paddle.transform.position.y + (paddle.transform.localScale.y * .5f)), 0);
+			else 
+				location = new Vector3((paddle.transform.position.x), ((ball.transform.localScale.y * .5f) + paddle.transform.position.y + (paddle.transform.localScale.y * .5f)), 0);
+			Instantiate(ball ,location, Quaternion.identity);
 			reset =false;
 		}
 	}

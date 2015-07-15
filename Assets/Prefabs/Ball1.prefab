@@ -73,10 +73,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6764784a4c7c141c793ad924af2f02cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 0}
+  howSideways: .300000012
   horizontal: 0
   virticle: -1
-  speed: 10
+  speed: 15
 --- !u!135 &13522102
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -103,6 +103,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: virticle
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: speed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: howSideways
+      value: .300000012
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -7,34 +7,40 @@ public class PaddleScript : MonoBehaviour {
 	public float speed=1;
 
 	float inSpeed = 0 ;
-	Vector3 direction ;
+	public Vector3 direction ;
 	Vector3 move;
+	public bool moving = false;
 
 	void Awake () {
 		main = this;
 	}
-	void Start(){
-	}
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey ("a") && Input.GetKey ("d"))
+		if (Input.GetKey ("a") && Input.GetKey ("d")) {
+			moving = false;
 			return;
-		else if (Input.GetKey ("a")) {
+		} else if (Input.GetKey ("a")) {
 			inSpeed = -speed;
-		} else if (Input.GetKey ("d"))
+			moving = true;
+		} else if (Input.GetKey ("d")) {
 			inSpeed = speed;
-		else 
+			moving = true;
+		} else {
+			moving = false;
 			return;
+		}
 		//Debug.Log (inSpeed);
-		Debug.Log (CanMove());
+	//	Debug.Log (CanMove());
 		if (CanMove ()){
-			Debug.Log ("in:");
+			moving = true;
+		//	Debug.Log ("in:");
 			direction = new Vector3 (inSpeed, 0, 0);
 			transform.position += delta;
 		}
-	//	else
-		//	transform.position -= delta;
+		else
+			moving = false;
+			//	transform.position -= delta;
 
 	}
 	bool CanMove(){
@@ -49,7 +55,7 @@ public class PaddleScript : MonoBehaviour {
 			return true;
 		}
 	}
-	Vector3 delta {
+	public Vector3 delta {
 		get {
 			return Time.deltaTime * direction;
 			

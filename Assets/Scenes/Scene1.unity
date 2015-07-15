@@ -395,6 +395,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
+  direction: {x: 0, y: 0, z: 0}
+  moving: 0
 --- !u!23 &912269676
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -534,8 +536,9 @@ GameObject:
   - 33: {fileID: 1516705734}
   - 65: {fileID: 1516705733}
   - 23: {fileID: 1516705732}
+  - 114: {fileID: 1516705736}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Brick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -596,6 +599,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
+--- !u!114 &1516705736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1516705731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3168cd0e02645afae480560cecd45d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  durability: 1
 --- !u!1 &1966191376
 GameObject:
   m_ObjectHideFlags: 0
