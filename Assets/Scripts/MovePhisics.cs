@@ -8,6 +8,7 @@ public class MovePhisics : MonoBehaviour {
 	public float virticle;
 	public float speed=1;
 	PaddleScript paddle;
+	BrickBehavior brick;
 //	float rightl;
 //	float leftl;
 //	PaddleScript paddle;
@@ -17,6 +18,7 @@ public class MovePhisics : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		paddle = PaddleScript.main;
+		brick = BrickBehavior.main;
 		forces = new Vector3 (horizontal, virticle, 0);
 	
 	}
@@ -27,17 +29,22 @@ public class MovePhisics : MonoBehaviour {
 			ballIsStuck = false;
 			forces = new Vector3(0,1,0);
 		}
-		Debug.Log (delta);
+	//	Debug.Log (delta);
 		transform.position += delta;
 
 	}
 	void ChangeDirections(){
 		if (ballIsStuck == false) {
-			if (delta.x + transform.position.x >= 9.5 || delta.x + transform.position.x <= -9.5)
+			if (brick != null)
+				isBrick(transform.position);
+			if (delta.x + transform.position.x >= 9.5 || delta.x + transform.position.x <= -9.5){
 				forces.x *= -1;
-			if (delta.y + transform.position.y >= 6.5)
+
+			}
+			if (delta.y + transform.position.y >= 6.5){
 				forces.y *= -1;
 			
+			}
 			if (delta.y + transform.position.y <= -6.5) {
 				SpawnBall.reset = true;
 				Destroy (gameObject);
@@ -61,6 +68,23 @@ public class MovePhisics : MonoBehaviour {
 			forces = paddle.direction / speed;
 		else {
 			forces = Vector3.zero;	
+		}
+	}
+	void isBrick(Vector3 destination){
+		bool hit = false;
+		if ((destination.x + delta.x + .5 >= brick.leftBound && destination.x + .5 <= brick.leftBound || destination.x + delta.x - .5 <= brick.rightBound && destination.x - .5 >= brick.rightBound) && destination.y + delta.y + .5 >= brick.lowerBound && destination.y + delta.y - .5 <= brick.uperBound) {
+			forces.x *= -1;
+			hit=true;
+		}
+	//	else if ((destination.x + delta.x + .5 >= brick.leftBound && destination.x +.5 <= brick.leftBound ) && destination.x -.5>= brick.rightBound && destination.y + delta.y  +.5 >= brick.lowerBound && destination.y + delta.y  -.5 <= brick.uperBound)
+		//	forces.x *= -1;
+		else if ((destination.x + delta.x + .5 >= brick.leftBound && destination.x + delta.x - .5 <= brick.rightBound) && (destination.y + delta.y + .5 >= brick.lowerBound && destination.y + .5 <= brick.lowerBound || (destination.y - .5 <= brick.uperBound && destination.y - .5 >= brick.lowerBound))){
+			forces.y *= -1;
+			hit = true;
+		}
+		if (hit == true) {
+			brick.GotHit ();
+			hit = false;
 		}
 	}
 	Vector3 delta{
