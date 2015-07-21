@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PaddleScript : MonoBehaviour {
 	public static PaddleScript main;
-	// Use this for initialization
 	public float speed=1;
 
 	float inSpeed = 0 ;
