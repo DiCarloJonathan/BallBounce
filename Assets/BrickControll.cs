@@ -5,7 +5,7 @@ public class BrickControll : MonoBehaviour {
 
 	public GameObject brickO;
 	public int numberOfBricks=1;
-	public static int numBricks=2;
+	public static int numBricks=3;
 	public static int whichBrick=0;
 	Vector3 where = Vector3.zero;
 	public static BrickBehavior [] brick;
