@@ -14,7 +14,7 @@ public class MovePhisics : MonoBehaviour {
 //	PaddleScript paddle;
 	bool ballIsStuck = true;
 	Vector3 forces; 
-	Vector3 paddleDir = Vector3.up;
+//	Vector3 paddleDir = Vector3.up;
 	List<int> hits = new List<int>();
 	// Use this for initialization
 	void Start () {
