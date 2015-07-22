@@ -16,7 +16,7 @@ public class BrickControll : MonoBehaviour {
 		for (int i =0; i < numBricks; i++) {
 			Instantiate (brickO, where, Quaternion.identity);
 			brick[i] = BrickBehavior.main;
-			where.x += 3;
+			where.x += 2;
 
 		}
 	

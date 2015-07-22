@@ -32,21 +32,21 @@ public class BrickBehavior : MonoBehaviour {
 		lowerBound = (float)(transform.position.y - (transform.localScale.y * .5));
 		leftBound = (float)(transform.position.x - (transform.localScale.x * .5));
 		rightBound = (float)(transform.position.x + (transform.localScale.x * .5));
-		Debug.Log (curentCollor.r );
+	//	Debug.Log (curentCollor.r );
 	}
 
 	public void GotHit(){
-		Debug.Log (curentCollor.r -collorChange);
-		Debug.Log ("befor: " + curentCollor.r );
-		durability -= 1;
-		brickColl.color = new Color32((byte)(curentCollor.r -collorChange), (byte)0,(byte)0, (byte)255);
-		curentCollor.r = (byte)(curentCollor.r - collorChange);
-		Debug.Log ("After: " + curentCollor.r );
-		if (durability > 0) {
-			//collor change
-			return;
-		} else {
+		//Debug.Log (curentCollor.r -collorChange);
+		//Debug.Log ("befor: " + curentCollor.r );
+		//Debug.Log ("After: " + curentCollor.r );
+		if (durability <= 1) {
 			Destroy(gameObject);
+		} else{
+			//collor change
+			durability -= 1;
+			brickColl.color = new Color32((byte)(curentCollor.r -collorChange), (byte)0,(byte)0, (byte)255);
+			curentCollor.r = (byte)(curentCollor.r - collorChange);
+			return;
 		}
 		
 	}

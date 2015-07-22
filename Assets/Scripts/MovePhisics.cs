@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MovePhisics : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class MovePhisics : MonoBehaviour {
 	bool ballIsStuck = true;
 	Vector3 forces; 
 	Vector3 paddleDir = Vector3.up;
+	List<int> hits = new List<int>();
 	// Use this for initialization
 	void Start () {
 		paddle = PaddleScript.main;
@@ -70,22 +72,35 @@ public class MovePhisics : MonoBehaviour {
 		}
 	}
 	void isBrick(Vector3 destination){
-		int hit = -1;
-		for(int i=0; i< BrickControll.numBricks; i++)
-		if ((destination.x + delta.x + .5 >= BrickControll.brick[i].leftBound && destination.x + .5 <= BrickControll.brick[i].leftBound || destination.x + delta.x - .5 <= BrickControll.brick[i].rightBound && destination.x - .5 >= BrickControll.brick[i].rightBound) && destination.y + delta.y + .5 >= BrickControll.brick[i].lowerBound && destination.y + delta.y - .5 <= BrickControll.brick[i].uperBound) {
-				forces.x *= -1;
-				hit=i;
-			}
+		for (int i=0; i< BrickControll.numBricks; i++) {
+			Debug.Log ("for check");
+			if (BrickControll.brick [i] != null) {
+				if ((destination.x + delta.x + .5 >= BrickControll.brick [i].leftBound && destination.x + .5 <= BrickControll.brick [i].leftBound || destination.x + delta.x - .5 <= BrickControll.brick [i].rightBound && destination.x - .5 >= BrickControll.brick [i].rightBound) && destination.y + delta.y + .5 >= BrickControll.brick [i].lowerBound && destination.y + delta.y - .5 <= BrickControll.brick [i].uperBound) {
+					forces.x *= -1;
+					hits.Add (i);
+					Debug.Log ("hitl" + i);
+				}
 	//	else if ((destination.x + delta.x + .5 >= brick.leftBound && destination.x +.5 <= brick.leftBound ) && destination.x -.5>= brick.rightBound && destination.y + delta.y  +.5 >= brick.lowerBound && destination.y + delta.y  -.5 <= brick.uperBound)
 		//	forces.x *= -1;
-		else if ((destination.x + delta.x + .5 >= BrickControll.brick[i].leftBound && destination.x + delta.x - .5 <= BrickControll.brick[i].rightBound) && (destination.y + delta.y + .5 >= BrickControll.brick[i].lowerBound && destination.y + .5 <= BrickControll.brick[i].lowerBound || (destination.y - .5 <= BrickControll.brick[i].uperBound && destination.y - .5 >= BrickControll.brick[i].lowerBound))){
-				forces.y *= -1;
-				hit = i;
+				else if ((destination.x + delta.x + .5 >= BrickControll.brick [i].leftBound && destination.x + delta.x - .5 <= BrickControll.brick [i].rightBound) && (destination.y + delta.y + .5 >= BrickControll.brick [i].lowerBound && destination.y + .5 <= BrickControll.brick [i].lowerBound || (destination.y - .5 <= BrickControll.brick [i].uperBound && destination.y - .5 >= BrickControll.brick [i].lowerBound))) {
+					forces.y *= -1;
+					if (!hits.Contains (i)) {
+						hits.Add (i);
+						Debug.Log ("hitb" + i);
+					}
+				}
 			}
-		if (hit != -1) {
-			for(int i=0; i< BrickControll.numBricks; i++)
-				BrickControll.brick[hit].GotHit ();
-			hit = -1;
+		}
+		Debug.Log ("End For Check");
+		if (hits != null) {
+			foreach (int hit in hits){
+				Debug.Log("hit check");
+				if (BrickControll.brick[hit] != null){
+					BrickControll.brick[hit].GotHit ();
+				Debug.Log("damaged :"+hit);
+				}
+			}
+			hits.Clear();
 		}
 	}
 	Vector3 delta{
