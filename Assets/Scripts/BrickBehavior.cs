@@ -14,6 +14,8 @@ public class BrickBehavior : MonoBehaviour {
 
 	public Renderer rend;
 
+
+
 	Material brickColl;
 //	Shader shadeCol;
 	Color32 curentCollor;

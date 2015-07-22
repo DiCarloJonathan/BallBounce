@@ -7,9 +7,7 @@ public class MovePhisics : MonoBehaviour {
 	public float horizontal;
 	public float virticle;
 	public float speed=1;
-	public int numBricks=2;
 	PaddleScript paddle;
-	BrickBehavior [] brick;
 //	float rightl;
 //	float leftl;
 //	PaddleScript paddle;
@@ -19,9 +17,6 @@ public class MovePhisics : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		paddle = PaddleScript.main;
-		brick = new BrickBehavior [numBricks];
-		for(int i=0; i< numBricks; i++)
-			brick[i] = BrickBehavior.main;
 		forces = new Vector3 (horizontal, virticle, 0);
 	
 	}
@@ -38,8 +33,8 @@ public class MovePhisics : MonoBehaviour {
 	}
 	void ChangeDirections(){
 		if (ballIsStuck == false) {
-			for(int i=0; i< numBricks; i++)
-				if (brick[i] != null)
+			for(int i=0; i< BrickControll.numBricks; i++)
+				if (BrickControll.brick[i] != null)
 					isBrick(transform.position);
 			if (delta.x + transform.position.x >= 9.5 || delta.x + transform.position.x <= -9.5){
 				forces.x *= -1;
@@ -76,20 +71,20 @@ public class MovePhisics : MonoBehaviour {
 	}
 	void isBrick(Vector3 destination){
 		int hit = -1;
-		for(int i=0; i< numBricks; i++)
-			if ((destination.x + delta.x + .5 >= brick[i].leftBound && destination.x + .5 <= brick[i].leftBound || destination.x + delta.x - .5 <= brick[i].rightBound && destination.x - .5 >= brick[i].rightBound) && destination.y + delta.y + .5 >= brick[i].lowerBound && destination.y + delta.y - .5 <= brick[i].uperBound) {
+		for(int i=0; i< BrickControll.numBricks; i++)
+		if ((destination.x + delta.x + .5 >= BrickControll.brick[i].leftBound && destination.x + .5 <= BrickControll.brick[i].leftBound || destination.x + delta.x - .5 <= BrickControll.brick[i].rightBound && destination.x - .5 >= BrickControll.brick[i].rightBound) && destination.y + delta.y + .5 >= BrickControll.brick[i].lowerBound && destination.y + delta.y - .5 <= BrickControll.brick[i].uperBound) {
 				forces.x *= -1;
 				hit=i;
 			}
 	//	else if ((destination.x + delta.x + .5 >= brick.leftBound && destination.x +.5 <= brick.leftBound ) && destination.x -.5>= brick.rightBound && destination.y + delta.y  +.5 >= brick.lowerBound && destination.y + delta.y  -.5 <= brick.uperBound)
 		//	forces.x *= -1;
-			else if ((destination.x + delta.x + .5 >= brick[i].leftBound && destination.x + delta.x - .5 <= brick[i].rightBound) && (destination.y + delta.y + .5 >= brick[i].lowerBound && destination.y + .5 <= brick[i].lowerBound || (destination.y - .5 <= brick[i].uperBound && destination.y - .5 >= brick[i].lowerBound))){
+		else if ((destination.x + delta.x + .5 >= BrickControll.brick[i].leftBound && destination.x + delta.x - .5 <= BrickControll.brick[i].rightBound) && (destination.y + delta.y + .5 >= BrickControll.brick[i].lowerBound && destination.y + .5 <= BrickControll.brick[i].lowerBound || (destination.y - .5 <= BrickControll.brick[i].uperBound && destination.y - .5 >= BrickControll.brick[i].lowerBound))){
 				forces.y *= -1;
 				hit = i;
 			}
 		if (hit != -1) {
-			for(int i=0; i< numBricks; i++)
-				brick[hit].GotHit ();
+			for(int i=0; i< BrickControll.numBricks; i++)
+				BrickControll.brick[hit].GotHit ();
 			hit = -1;
 		}
 	}
