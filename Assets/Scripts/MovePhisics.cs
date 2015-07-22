@@ -87,9 +87,10 @@ public class MovePhisics : MonoBehaviour {
 					hits.Add (i);
 					Debug.Log ("hitl" + i);
 				}
+
 	//	else if ((destination.x + delta.x + .5 >= brick.leftBound && destination.x +.5 <= brick.leftBound ) && destination.x -.5>= brick.rightBound && destination.y + delta.y  +.5 >= brick.lowerBound && destination.y + delta.y  -.5 <= brick.uperBound)
 		//	forces.x *= -1;
-				else if ((destination.x + delta.x + .5 >= BrickControll.brick [i].leftBound && destination.x + delta.x - .5 <= BrickControll.brick [i].rightBound) && (destination.y + delta.y + .5 >= BrickControll.brick [i].lowerBound && destination.y + .5 <= BrickControll.brick [i].lowerBound || (destination.y - .5 <= BrickControll.brick [i].uperBound && destination.y - .5 >= BrickControll.brick [i].lowerBound))) {
+				else if ((destination.x + delta.x + .5 >= BrickControll.brick [i].leftBound && destination.x + delta.x - .5 <= BrickControll.brick [i].rightBound) && (destination.y + delta.y + .5 >= BrickControll.brick [i].lowerBound && destination.y + .5 <= BrickControll.brick [i].lowerBound || (destination.y +delta.y - .5 <= BrickControll.brick [i].uperBound && destination.y - .5 >= BrickControll.brick [i].uperBound))) {
 					if (c2==0){
 						forces.y *= -1;
 						c2++;

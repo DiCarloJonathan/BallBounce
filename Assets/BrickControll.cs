@@ -5,7 +5,7 @@ public class BrickControll : MonoBehaviour {
 
 	public GameObject brickO;
 	public GameObject brick2;
-	public int[,] level = new int[6,6]{{1,0,0,0,0,0},{1,0,0,0,1,0},{0,1,0,1,0,0},{0,0,0,0,0,0},{0,2,0,0,0,0},{1,0,0,0,0,2}};
+	public int[,] level = new int[6,6]{{1,0,0,0,0,0},{0,0,0,0,1,0},{0,0,0,1,0,0},{0,0,0,0,0,0},{0,0,1,1,1,0},{1,0,0,0,0,2}};
 	public static int numBricks;
 	public static int whichBrick=0;
 	Vector3 where = Vector3.zero;
