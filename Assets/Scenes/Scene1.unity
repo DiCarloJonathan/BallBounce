@@ -316,7 +316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brickO: {fileID: 159934, guid: 48ce3899c54e2437a92e50f09370507a, type: 2}
-  numberOfBricks: 1
+  brick2: {fileID: 197158, guid: 55533d99cd0404cc794f392d4bcb3186, type: 2}
 --- !u!1 &805752651
 GameObject:
   m_ObjectHideFlags: 0

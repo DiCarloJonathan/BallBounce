@@ -7,6 +7,7 @@ public class BrickBehavior : MonoBehaviour {
 	public int durability = 1; 
 	public float collorChange;
 
+	public int cR=0 ,cG=0,cB=0,cA=255;
 	public float uperBound;
 	public float lowerBound;
 	public float leftBound;
@@ -26,7 +27,7 @@ public class BrickBehavior : MonoBehaviour {
 		rend = GetComponent <Renderer> ();
 		rend.enabled = true;
 		brickColl =rend.material;//new Material (Shader.Find("brick")); 
-		brickColl.color = new Color32((byte)(collorChange * durability), (byte)0,(byte)0, (byte)255);
+		brickColl.color = new Color32((byte)(cR * durability), (byte)(cG* durability),(byte)(cB* durability), (byte)(cA));
 		curentCollor = brickColl.color;
 		uperBound = (float)(transform.position.y + (transform.localScale.y * .5));
 		lowerBound = (float)(transform.position.y - (transform.localScale.y * .5));
@@ -44,10 +45,21 @@ public class BrickBehavior : MonoBehaviour {
 		} else{
 			//collor change
 			durability -= 1;
-			brickColl.color = new Color32((byte)(curentCollor.r -collorChange), (byte)0,(byte)0, (byte)255);
-			curentCollor.r = (byte)(curentCollor.r - collorChange);
+			brickColl.color = new Color32((byte)(curentCollor.r -collorChange), (byte)(curentCollor.g -collorChange),(byte)(curentCollor.r -collorChange), (byte)cA);
+			colorSet();
 			return;
 		}
+
 		
+	}
+
+	void colorSet(){
+		if(curentCollor.r - collorChange>=0)
+				curentCollor.r = (byte)(curentCollor.r - collorChange);
+			if(curentCollor.g - collorChange>=0)
+				curentCollor.g = (byte)(curentCollor.g - collorChange);
+			if(curentCollor.b - collorChange>=0)
+				curentCollor.b = (byte)(curentCollor.b - collorChange);
+
 	}
 }
