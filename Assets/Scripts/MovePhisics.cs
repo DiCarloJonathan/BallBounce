@@ -72,14 +72,19 @@ public class MovePhisics : MonoBehaviour {
 			} else if ((delta.y + transform.position.y - .5 <= paddle.transform.position.y + paddle.transform.localScale.y * .5) &&
 				(delta.y + transform.position.y + .5 >= paddle.transform.position.y - paddle.transform.localScale.y * .5) &&
 				((delta.x + transform.position.x + .5 >= paddle.delta.x + paddle.transform.position.x - (.5 * paddle.transform.localScale.x)) &&
-				(transform.position.x + .5 <= paddle.transform.position.x - (.5 * paddle.transform.localScale.x))))
+				(transform.position.x + .5 <= paddle.transform.position.x - (.5 * paddle.transform.localScale.x)))){
 			        
 				forces.x = -paddle.speed;
+				forces.y*=20;
+				forces.Normalize ();
+			}
 		 else if ((delta.y + transform.position.y - .5 <= paddle.transform.position.y + paddle.transform.localScale.y * .5) &&
 			(delta.y + transform.position.y + .5 >= paddle.transform.position.y - paddle.transform.localScale.y * .5) &&
 			((delta.x + transform.position.x - .5 <= paddle.delta.x + paddle.transform.position.x + (.5 * paddle.transform.localScale.x)) &&
 			(transform.position.x - .5 >= paddle.transform.position.x + (.5 * paddle.transform.localScale.x)))) {
 			forces.x = paddle.speed;
+			forces.y*=20;
+			forces.Normalize ();
 			
 		}
 		} else if (paddle.moving == true && ballIsStuck == true)

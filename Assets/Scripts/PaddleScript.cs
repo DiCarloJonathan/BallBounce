@@ -17,6 +17,7 @@ public class PaddleScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKey ("a") && Input.GetKey ("d")) {
+			inSpeed =0;
 			moving = false;
 			return;
 		} else if (Input.GetKey ("a")) {
@@ -26,6 +27,7 @@ public class PaddleScript : MonoBehaviour {
 			inSpeed = speed;
 			moving = true;
 		} else {
+			inSpeed =0;
 			moving = false;
 			return;
 		}
@@ -38,6 +40,7 @@ public class PaddleScript : MonoBehaviour {
 			transform.position += delta;
 		}
 		else
+			direction = new Vector3 (inSpeed, 0, 0);
 			moving = false;
 			//	transform.position -= delta;
 
