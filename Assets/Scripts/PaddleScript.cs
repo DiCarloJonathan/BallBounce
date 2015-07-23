@@ -34,13 +34,12 @@ public class PaddleScript : MonoBehaviour {
 		//Debug.Log (inSpeed);
 	//	Debug.Log (CanMove());
 		if (CanMove ()){
-			moving = true;
 		//	Debug.Log ("in:");
 			direction = new Vector3 (inSpeed, 0, 0);
 			transform.position += delta;
 		}
 		else
-			direction = new Vector3 (inSpeed, 0, 0);
+		//	direction = new Vector3 (inSpeed, 0, 0);
 			moving = false;
 			//	transform.position -= delta;
 
