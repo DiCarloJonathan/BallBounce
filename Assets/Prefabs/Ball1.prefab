@@ -76,7 +76,7 @@ MonoBehaviour:
   howSideways: .300000012
   horizontal: 0
   virticle: -1
-  speed: 15
+  speed: 12
 --- !u!135 &13522102
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -106,7 +106,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: speed
-      value: 15
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: howSideways
