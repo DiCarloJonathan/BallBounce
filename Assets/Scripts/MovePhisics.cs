@@ -91,7 +91,10 @@ public class MovePhisics : MonoBehaviour {
 			forces = paddle.direction / speed;
 		else if(ballIsStuck == true)
 			forces = Vector3.zero;	
+//		Debug.Log (paddle.delta);
+
 	}
+
 	void isBrick(Vector3 destination){
 		int c1=0,c2=0;
 		for (int i=0; i< BrickControll.numBricks; i++) {

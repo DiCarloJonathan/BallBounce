@@ -18,38 +18,45 @@ public class PaddleScript : MonoBehaviour {
 	void Update () {
 		if (Input.GetKey ("a") && Input.GetKey ("d")) {
 			inSpeed =0;
+			//direction = new Vector3 (0, 0, 0);
 			moving = false;
-			return;
 		} else if (Input.GetKey ("a")) {
 			inSpeed = -speed;
+			//direction = new Vector3 (-speed, 0, 0);
 			moving = true;
 		} else if (Input.GetKey ("d")) {
-			inSpeed = speed;
+			inSpeed =speed;
+		//	direction = new Vector3 (speed, 0, 0);
 			moving = true;
 		} else {
+			Debug.Log ("flag");
 			inSpeed =0;
+		//	direction = new Vector3 (0, 0, 0);
 			moving = false;
-			return;
 		}
-		//Debug.Log (inSpeed);
-	//	Debug.Log (CanMove());
-		if (CanMove ()){
-		//	Debug.Log ("in:");
+	
+		if (CanMove ()) {
 			direction = new Vector3 (inSpeed, 0, 0);
+			//direction.Normalize();
 			transform.position += delta;
-		}
-		else
-		//	direction = new Vector3 (inSpeed, 0, 0);
+			Debug.Log ("can move");
+		} else {
+			//direction = new Vector3 (0, 0, 0);
 			moving = false;
+			direction = new Vector3 (0, 0, 0);
+		//	Debug.Log("can't move");
 			//	transform.position -= delta;
-
+		}
+	
 	}
+
+
 	bool CanMove(){
 
-		if (Input.GetKey ("d") && ((transform.localScale.x * .5 )+ (transform.position.x) + (delta.x ) )> 10 ){
+		if (Input.GetKey ("d") && ((transform.localScale.x * .5 )+ (transform.position.x) + (delta.x ) )>= 10 ){
 			return false;
 		}
-		else if  (Input.GetKey ("a") && ((-transform.localScale.x * .5 )+ transform.position.x + delta.x )< -10){
+		else if  (Input.GetKey ("a") && ((-transform.localScale.x * .5 )+ transform.position.x + delta.x )<= -10){
 			return false;
 		}
 		else{
