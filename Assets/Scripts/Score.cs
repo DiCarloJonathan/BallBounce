@@ -5,11 +5,25 @@ using System.Collections;
 public class Score : MonoBehaviour {
 
 	public Text timeText;
-	float timer=0;
+	public float timer=60;
 
 	void Update () {
-		timeText.text = "Time Elapsed: " + (int)timer+" Seconds"; 
-		timer += Time.deltaTime;
+	/*	if ((int)timer==1)
+			timeText.text = "Time to Finish: " + 1+" Second";
+		else if ((int)timer < 60)
+			timeText.text = "Time to Finish: " + (int)timer+" Seconds";
+		else if ((int)timer % 60 == 0)
+			timeText.text = "Time to Finish: " + (int)timer/60 +" Minutes";
+		else if (timer > 60 && (int)timer%60 ==1)
+			timeText.text = "Time to Finish: " + (int)timer/60 + " Minutes " + 1+ " second";
+		else if (timer > 60)
+			timeText.text = "Time to Finish: " + (int)timer/60 + " Minutes " + (int)timer%60+ " seconds";*/
+
+		if((int)timer%60>9)
+			timeText.text = "Time to Finish: " + (int)timer/60+":"+(int)timer%60;
+		else
+			timeText.text = "Time to Finish: " + (int)timer/60+":"+0+(int)timer%60;
+		timer -= Time.deltaTime;
 	
 	}
 }
