@@ -5,7 +5,7 @@ using System.Collections;
 public class Score : MonoBehaviour {
 
 	public Text timeText;
-	public float timer=60;
+	public static float timer=60;
 
 	void Update () {
 	/*	if ((int)timer==1)
