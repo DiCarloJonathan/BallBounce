@@ -9,18 +9,31 @@ public class canvasControles : MonoBehaviour {
 	public int numButtons=1;
 
 	void Awake () {
-		Vector3 location = new Vector3 (0,100,0);
+		Vector3 location = new Vector3 (0,0,0);
 	//	canvas = (Canvas) FindObjectOfType(typeof(Canvas));
 	//	canvas = new GameObject("Canvas", typeof(RectTransform));
 	//	gameObject
 		int scrollWindowH = 350;
+		float containerHight;
+
+		if ((float)scrollWindowH / ((float)numButtons * 40 + 40) > 1) {
+			containerHight = scrollWindowH;
+			location.y += .5f * containerHight -20;
+		}
+		else {
+			containerHight = numButtons * 40 + 40;
+			location.y += .5f * (numButtons * 40);
+		}
 
 		GameObject canvas = AddCanvas ();
 
-		GameObject container = AddContainer (canvas, Vector2.zero, new Vector2(170 ,scrollWindowH));// (numButtons* 30) +40));//make*buttonHighth
+		GameObject vScrollBar = AddScroleBar (canvas, new Vector2(90,0), new Vector2 (20,scrollWindowH));
+		GameObject container = AddContainer (canvas, new Vector2(0,(.5f * scrollWindowH) - (.5f * (numButtons * 40 + 40)) ), new Vector2(170, containerHight));
+		GameObject scrollArea = AddScrollArea (canvas, Vector2.zero, new Vector2(180 ,scrollWindowH), container, vScrollBar);// (numButtons* 30) +40));//make*buttonHighth
+	//	scrollArea.GetComponent<Scrol>();
 
 		for (int i=0; i<numButtons; i++) {
-			ButtonObj(container ,location, "Button", new Vector2 (160, 30), new Color (1f, .3f, .3f, 1f), "Winner", 0, 20, new Color (0f, 0f, 0f, 1f));
+			ButtonObj(container ,location, "Button", new Vector2 (160, 30), new Color (1f, .3f, .3f, 1f), "Winner " + (i+1), 0, 20, new Color (0f, 0f, 0f, 1f));
 			location.y -= 40;
 		}
 		SliderObj (container, location, new Vector2 (160, 10), Slider.Direction.LeftToRight, 100, 0, 100);
@@ -30,22 +43,37 @@ public class canvasControles : MonoBehaviour {
 //		GameObject eventSystem  = new GameObject("Event System", typeof(Transform));
 //		eventSystem.AddComponent<Touch>();
 //	}
-	GameObject AddContainer(GameObject go, Vector2 location, Vector2 size){
-		AddScroleBar (go, new Vector2(100,0));//add dementions
+	GameObject AddScrollArea(GameObject go, Vector2 location, Vector2 size, GameObject container, GameObject vScrollBar, Scrollbar hScrollBar=null){
 
+
+		GameObject scrollArea = new GameObject ("Scroll Area", typeof(RectTransform));
+		scrollArea.transform.SetParent (go.transform, false);
+		ScrollRect sRect = scrollArea.AddComponent<ScrollRect>();
+		sRect.movementType = ScrollRect.MovementType.Clamped;
+		sRect.horizontal = false;
+		sRect.inertia = false;
+		AddImageComponant (scrollArea, Color.white, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
+		scrollArea.AddComponent<Mask>();
+
+		container.transform.SetParent (scrollArea.transform, false);
+
+		sRect.content=container.GetComponent<RectTransform>();
+		sRect.verticalScrollbar = vScrollBar.GetComponent<Scrollbar>();;
+
+		return scrollArea;
+	}
+
+	GameObject AddContainer(GameObject go, Vector2 location, Vector2 size){
 		GameObject container = new GameObject ("Container", typeof(RectTransform));
 		container.transform.SetParent (go.transform, false);
-		ScrollRect sRect = container.AddComponent<ScrollRect>();
-		sRect.movementType = ScrollRect.MovementType.Clamped;
-		//dont forget image and mask
-	
+		AddImageComponant (container, Color.white, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
 
 		return container;
 	}
 
-	GameObject AddScroleBar (GameObject go, Vector2 location ){
+	GameObject AddScroleBar (GameObject go, Vector2 location, Vector2 size){
 		GameObject scrollBar  = new GameObject("Scroll Bar", typeof(RectTransform), typeof(CanvasRenderer));
-		AddImageComponant (scrollBar, Color.magenta, "none", location, new Vector2(10,160), new Vector2(.5f, .5f), new Vector2(.5f, .5f));
+		AddImageComponant (scrollBar, Color.magenta, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
 		Scrollbar SBarAlt = scrollBar.AddComponent<Scrollbar>();
 		scrollBar.transform.SetParent(go.transform, false);
 
@@ -63,7 +91,7 @@ public class canvasControles : MonoBehaviour {
 
 		SBarAlt.targetGraphic = handle.GetComponent<Image> ();
 		SBarAlt.handleRect = handle.GetComponent<RectTransform>();
-		SBarAlt.direction = Scrollbar.Direction.BottomToTop;
+		SBarAlt.direction = Scrollbar.Direction.TopToBottom;
 
 	//	scrol
 	//	ScrollbarFunctionality (go, SBarAlt.onValueChanged);

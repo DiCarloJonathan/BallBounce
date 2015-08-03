@@ -451,11 +451,11 @@ RectTransform:
   m_Children:
   - {fileID: 1939762074}
   m_Father: {fileID: 1925687047}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 20}
+  m_AnchoredPosition: {x: -216.899994, y: 0}
+  m_SizeDelta: {x: 20, y: 160}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &434880418
 MonoBehaviour:
@@ -494,9 +494,9 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 440551587}
   m_HandleRect: {fileID: 440551589}
-  m_Direction: 0
+  m_Direction: 3
   m_Value: 1
-  m_Size: .200000003
+  m_Size: .349911183
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -611,6 +611,9 @@ GameObject:
   m_Component:
   - 224: {fileID: 468440861}
   - 114: {fileID: 468440862}
+  - 222: {fileID: 468440865}
+  - 114: {fileID: 468440864}
+  - 114: {fileID: 468440863}
   m_Layer: 5
   m_Name: GameObject
   m_TagString: Untagged
@@ -630,11 +633,11 @@ RectTransform:
   m_Children:
   - {fileID: 557474037}
   m_Father: {fileID: 1925687047}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -300, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchoredPosition: {x: -330, y: -1}
+  m_SizeDelta: {x: 177, y: 197}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &468440862
 MonoBehaviour:
@@ -650,18 +653,57 @@ MonoBehaviour:
   m_Content: {fileID: 557474037}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: .100000001
   m_Inertia: 1
-  m_DecelerationRate: .135000005
+  m_DecelerationRate: 0
   m_ScrollSensitivity: 1
   m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 434880418}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &468440863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 468440860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1200242548, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
+--- !u!114 &468440864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 468440860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &468440865
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 468440860}
 --- !u!1 &557474036
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,8 +740,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchoredPosition: {x: -3, y: -183}
+  m_SizeDelta: {x: 208, y: 563}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &557474038
 MonoBehaviour:
@@ -817,7 +859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &875249333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,6 +871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6408ee2be2b6248e596796dfa29885bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numButtons: 15
 --- !u!4 &875249334
 Transform:
   m_ObjectHideFlags: 0
@@ -1360,10 +1403,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 468440861}
   - {fileID: 434880417}
+  - {fileID: 468440861}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -1664,4 +1707,4 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
