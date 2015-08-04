@@ -6,26 +6,46 @@ public class canvasControles : MonoBehaviour {
 	//Canvas canvas;
 	//GameObject canvas;
 
-	public int numButtons=1;
+	//public int numButtons=1;
+	public GameObject canvas;
+//	public delegate void AddUiEvent();
+//	public static event AddUiEvent OnSubmited;
+//	InputField.SubmitEvent AddUI;//{
+//		Debug.Log ("??????");
+//	}
 
 	void Awake () {
-		Vector3 location = new Vector3 (0,0,0);
-	//	canvas = (Canvas) FindObjectOfType(typeof(Canvas));
-	//	canvas = new GameObject("Canvas", typeof(RectTransform));
-	//	gameObject
+		canvas = AddCanvas ();
+		GameObject inputField = AddInputField (canvas, new Vector2 (0, 0), new Vector2 (240, 60), Vector2.zero, new Vector2 (-20, -13), "How many buttons?");
+		InputField inputNumButtons = inputField.GetComponent <InputField> ();
+		inputNumButtons.onEndEdit.AddListener (val => {
+			int value;
+			if (Input.GetKeyDown("return")){
+				if(int.TryParse(val, out value)){
+					inputField.SetActive(false);
+					AddUi((int)value);
+				}
+				else{
+					print(val+" is not a number");
+
+				}
+			}
+
+		});
+
+	}
+	void AddUi(int numButtons){
+		Vector3 location = new Vector3 (0, 0, 0);
 		int scrollWindowH = 350;
 		float containerHight;
-
+		
 		if ((float)scrollWindowH / ((float)numButtons * 40 + 40) > 1) {
 			containerHight = scrollWindowH;
-			location.y += .5f * containerHight -20;
-		}
-		else {
+			location.y += .5f * containerHight - 20;
+		} else {
 			containerHight = numButtons * 40 + 40;
 			location.y += .5f * (numButtons * 40);
 		}
-
-		GameObject canvas = AddCanvas ();
 
 		GameObject vScrollBar = AddScroleBar (canvas, new Vector2(90,0), new Vector2 (20,scrollWindowH));
 		GameObject container = AddContainer (canvas, new Vector2(0,(.5f * scrollWindowH) - (.5f * (numButtons * 40 + 40)) ), new Vector2(170, containerHight));
@@ -37,14 +57,12 @@ public class canvasControles : MonoBehaviour {
 			location.y -= 40;
 		}
 		SliderObj (container, location, new Vector2 (160, 10), Slider.Direction.LeftToRight, 100, 0, 100);
-		AddInputField (canvas, new Vector2(300,0), new Vector2(240, 60), Vector2.zero, new Vector2(-20,-13));
 	}
-
 //	void AddEventSystem(){
 //		GameObject eventSystem  = new GameObject("Event System", typeof(Transform));
 //		eventSystem.AddComponent<Touch>();
 //	}
-	GameObject AddInputField(GameObject go, Vector2 location, Vector2 size, Vector2 textLocation, Vector2 textSize){
+	GameObject AddInputField(GameObject go, Vector2 location, Vector2 size, Vector2 textLocation, Vector2 textSize, string placeholderText){
 		GameObject inputField = new GameObject ("Input Field", typeof(RectTransform));
 		inputField.transform.SetParent (go.transform, false);
 		AddImageComponant (inputField, Color.white, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
@@ -60,7 +78,7 @@ public class canvasControles : MonoBehaviour {
 		inputCaretRect.anchorMin = Vector2.zero;
 		inputCaretRect.anchorMax = Vector2.one;
 
-		Text placeHolderText = AddTextObjChild (inputField, 0, 30, Color.grey, "Placeholder", TextAnchor.MiddleLeft, textLocation, textSize, Vector2.zero, Vector2.one);
+		Text placeHolderText = AddTextObjChild (inputField, 0, 30, Color.grey, placeholderText, TextAnchor.MiddleLeft, textLocation, textSize, Vector2.zero, Vector2.one, "Place Holder Text");
 		Text inputText = AddTextObjChild(inputField, 0, 30, Color.black, "", TextAnchor.MiddleLeft, textLocation, textSize, Vector2.zero, Vector2.one);
 		placeHolderText.fontStyle = FontStyle.Italic;
 		inputText.supportRichText = false;
@@ -215,8 +233,8 @@ public class canvasControles : MonoBehaviour {
 		image.color = colorS;
 		image.type = imageType;
 	}
-	Text AddTextObjChild(GameObject go, int font, int fontSize, Color textColor, string textActual, TextAnchor textAnchor, Vector2 position, Vector2 size, Vector2 anchorMin, Vector2 anchorMax){
-		GameObject text = new GameObject ("Text", typeof(CanvasRenderer));
+	Text AddTextObjChild(GameObject go, int font, int fontSize, Color textColor, string textActual, TextAnchor textAnchor, Vector2 position, Vector2 size, Vector2 anchorMin, Vector2 anchorMax, string name = "Text"){
+		GameObject text = new GameObject (name, typeof(CanvasRenderer));
 		Text textC = AddTextComponent (text, font, fontSize, textColor, textActual, textAnchor, position, size, anchorMin, anchorMax);
 		text.transform.SetParent(go.transform, false);
 
