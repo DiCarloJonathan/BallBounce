@@ -3,16 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class canvasControles : MonoBehaviour {
-	//Canvas canvas;
-	//GameObject canvas;
-
-	//public int numButtons=1;
+	
 	public GameObject canvas;
-//	public delegate void AddUiEvent();
-//	public static event AddUiEvent OnSubmited;
-//	InputField.SubmitEvent AddUI;//{
-//		Debug.Log ("??????");
-//	}
 
 	void Awake () {
 		canvas = AddCanvas ();
@@ -31,7 +23,7 @@ public class canvasControles : MonoBehaviour {
 				}
 			}
 
-		});
+		});	
 
 	}
 	void AddUi(int numButtons){
@@ -86,6 +78,8 @@ public class canvasControles : MonoBehaviour {
 		inputScript.textComponent = inputText;
 		inputScript.placeholder = placeHolderText;
 
+		SetLayerRecursively (inputField, 5);
+
 		return inputField;
 	}
 
@@ -106,6 +100,8 @@ public class canvasControles : MonoBehaviour {
 		sRect.content=container.GetComponent<RectTransform>();
 		sRect.verticalScrollbar = vScrollBar.GetComponent<Scrollbar>();;
 
+		SetLayerRecursively (scrollArea, 5);
+
 		return scrollArea;
 	}
 
@@ -113,6 +109,8 @@ public class canvasControles : MonoBehaviour {
 		GameObject container = new GameObject ("Container", typeof(RectTransform));
 		container.transform.SetParent (go.transform, false);
 		AddImageComponant (container, Color.white, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
+
+		SetLayerRecursively (container, 5);	
 
 		return container;
 	}
@@ -137,7 +135,9 @@ public class canvasControles : MonoBehaviour {
 
 		SBarAlt.targetGraphic = handle.GetComponent<Image> ();
 		SBarAlt.handleRect = handle.GetComponent<RectTransform>();
-		SBarAlt.direction = Scrollbar.Direction.TopToBottom;
+		SBarAlt.direction = Scrollbar.Direction.BottomToTop;
+
+		SetLayerRecursively (scrollBar, 5);
 
 	//	scrol
 	//	ScrollbarFunctionality (go, SBarAlt.onValueChanged);
@@ -237,6 +237,7 @@ public class canvasControles : MonoBehaviour {
 		GameObject text = new GameObject (name, typeof(CanvasRenderer));
 		Text textC = AddTextComponent (text, font, fontSize, textColor, textActual, textAnchor, position, size, anchorMin, anchorMax);
 		text.transform.SetParent(go.transform, false);
+		SetLayerRecursively (text, 5);
 
 		return textC;
 
