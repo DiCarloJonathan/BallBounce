@@ -37,12 +37,40 @@ public class canvasControles : MonoBehaviour {
 			location.y -= 40;
 		}
 		SliderObj (container, location, new Vector2 (160, 10), Slider.Direction.LeftToRight, 100, 0, 100);
+		AddInputField (canvas, new Vector2(300,0), new Vector2(240, 60), Vector2.zero, new Vector2(-20,-13));
 	}
 
 //	void AddEventSystem(){
 //		GameObject eventSystem  = new GameObject("Event System", typeof(Transform));
 //		eventSystem.AddComponent<Touch>();
 //	}
+	GameObject AddInputField(GameObject go, Vector2 location, Vector2 size, Vector2 textLocation, Vector2 textSize){
+		GameObject inputField = new GameObject ("Input Field", typeof(RectTransform));
+		inputField.transform.SetParent (go.transform, false);
+		AddImageComponant (inputField, Color.white, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
+		InputField inputScript = inputField.AddComponent <InputField> ();
+
+		GameObject inputCaret = new GameObject ("Input Field Input Caret", typeof(RectTransform), typeof(CanvasRenderer));
+		LayoutElement layout = inputCaret.AddComponent<LayoutElement>();
+		inputCaret.transform.SetParent (inputField.transform, false);
+		layout.ignoreLayout = true;
+		RectTransform inputCaretRect = inputCaret.GetComponent<RectTransform>();
+		inputCaretRect.anchoredPosition = textLocation;
+		inputCaretRect.sizeDelta = textSize;
+		inputCaretRect.anchorMin = Vector2.zero;
+		inputCaretRect.anchorMax = Vector2.one;
+
+		Text placeHolderText = AddTextObjChild (inputField, 0, 30, Color.grey, "Placeholder", TextAnchor.MiddleLeft, textLocation, textSize, Vector2.zero, Vector2.one);
+		Text inputText = AddTextObjChild(inputField, 0, 30, Color.black, "", TextAnchor.MiddleLeft, textLocation, textSize, Vector2.zero, Vector2.one);
+		placeHolderText.fontStyle = FontStyle.Italic;
+		inputText.supportRichText = false;
+
+		inputScript.textComponent = inputText;
+		inputScript.placeholder = placeHolderText;
+
+		return inputField;
+	}
+
 	GameObject AddScrollArea(GameObject go, Vector2 location, Vector2 size, GameObject container, GameObject vScrollBar, Scrollbar hScrollBar=null){
 
 
@@ -187,13 +215,15 @@ public class canvasControles : MonoBehaviour {
 		image.color = colorS;
 		image.type = imageType;
 	}
-	void AddTextObjChild(GameObject go, int font, int fontSize, Color textColor, string textActual, TextAnchor textAnchor, Vector2 position, Vector2 size, Vector2 anchorMin, Vector2 anchorMax){
+	Text AddTextObjChild(GameObject go, int font, int fontSize, Color textColor, string textActual, TextAnchor textAnchor, Vector2 position, Vector2 size, Vector2 anchorMin, Vector2 anchorMax){
 		GameObject text = new GameObject ("Text", typeof(CanvasRenderer));
-		AddTextComponent (text, font, fontSize, textColor, textActual, textAnchor, position, size, anchorMin, anchorMax);
+		Text textC = AddTextComponent (text, font, fontSize, textColor, textActual, textAnchor, position, size, anchorMin, anchorMax);
 		text.transform.SetParent(go.transform, false);
 
+		return textC;
+
 	}
-	void AddTextComponent(GameObject go, int font, int fontSize, Color textColor, string textActual, TextAnchor textAnchor, Vector2 position, Vector2 size, Vector2 anchorMin, Vector2 anchorMax){
+	Text AddTextComponent(GameObject go, int font, int fontSize, Color textColor, string textActual, TextAnchor textAnchor, Vector2 position, Vector2 size, Vector2 anchorMin, Vector2 anchorMax){
 		Text text = go.AddComponent <Text>();
 		text.rectTransform.sizeDelta = size;
 		text.rectTransform.anchorMin = anchorMin;
@@ -205,6 +235,7 @@ public class canvasControles : MonoBehaviour {
 		text.color = textColor;
 		text.alignment = textAnchor;
 
+		return text;
 	}
 	public static void SetLayerRecursively(GameObject go, int layerNumber) {
 		if (go == null) return;
