@@ -8,24 +8,34 @@ public class canvasControles : MonoBehaviour {
 
 	void Awake () {
 		canvas = AddCanvas ();
-		GameObject inputField = AddInputField (canvas, new Vector2 (0, 0), new Vector2 (240, 60), Vector2.zero, new Vector2 (-20, -13), "How many buttons?");
-		InputField inputNumButtons = inputField.GetComponent <InputField> ();
-		inputNumButtons.onEndEdit.AddListener (val => {
-			int value;
-			if (Input.GetKeyDown("return")){
-				if(int.TryParse(val, out value)){
-					inputField.SetActive(false);
-					AddUi((int)value);
-				}
-				else{
-					print(val+" is not a number");
-
-				}
-			}
-
-		});	
+		GameObject inputField = AddInputField 
+			(canvas, 				
+			 new Vector2 (0, 0), 
+			 new Vector2 (240, 60), 
+			 Vector2.zero, 
+			 new Vector2 (-20, -13), 
+			 "How many buttons?");
+		GetInput (inputField); 
 
 	}
+	void GetInput (GameObject inputField){
+		InputField inputNumButtons = inputField.GetComponent <InputField> ();
+		inputNumButtons.onEndEdit.AddListener (val =>  DealWithInput(inputField, val));
+	}
+	void DealWithInput (GameObject inputField, string val){
+		int value;
+		if (Input.GetKeyDown("return")){
+			if(int.TryParse(val, out value)){
+				inputField.SetActive(false);
+				AddUi((int)value);
+			}
+			else{
+				print(val+" is not a number");
+				
+			}
+		}
+	}
+	
 	void AddUi(int numButtons){
 		Vector3 location = new Vector3 (0, 0, 0);
 		int scrollWindowH = 350;
@@ -39,30 +49,103 @@ public class canvasControles : MonoBehaviour {
 			location.y += .5f * (numButtons * 40);
 		}
 
-		GameObject vScrollBar = AddScroleBar (canvas, new Vector2(90,0), new Vector2 (20,scrollWindowH));
-		GameObject container = AddContainer (canvas, new Vector2(0,(.5f * scrollWindowH) - (.5f * (numButtons * 40 + 40)) ), new Vector2(170, containerHight));
-		GameObject scrollArea = AddScrollArea (canvas, Vector2.zero, new Vector2(180 ,scrollWindowH), container, vScrollBar);// (numButtons* 30) +40));//make*buttonHighth
-	//	scrollArea.GetComponent<Scrol>();
+		GameObject vScrollBar = AddScroleBar (
+			canvas, 
+			new Vector2(90,0), 
+			new Vector2 (20,
+	        scrollWindowH));
+		GameObject container = AddContainer (
+			canvas, 
+			new Vector2(0,(.5f * scrollWindowH) - (.5f * (numButtons * 40 + 40)) ), 
+			new Vector2(170, containerHight));
+		GameObject scrollArea = AddScrollArea (
+			canvas, Vector2.zero, 
+			new Vector2(180 ,scrollWindowH), 
+			container, 
+			vScrollBar);
 
+		spawnButtons (
+			numButtons,
+		    location,
+			container);
+
+		SliderObj (
+			container, 
+			location -=new Vector3 (0,40*numButtons,0),
+			new Vector2 (160, 10), 
+			Slider.Direction.LeftToRight, 
+			100, 0, 100);
+	}
+	void spawnButtons(int numButtons, Vector3 location , GameObject container){
 		for (int i=0; i<numButtons; i++) {
-			ButtonObj(container ,location, "Button", new Vector2 (160, 30), new Color (1f, .3f, .3f, 1f), "Winner " + (i+1), 0, 20, new Color (0f, 0f, 0f, 1f));
+			ButtonObj(
+				container,
+				location, 
+				"Button", 
+				new Vector2 (160, 30), 
+				new Color (1f, .3f, .3f, 1f), 
+				"Winner " + (i+1),
+				0, 20,
+				new Color (0f, 0f, 0f, 1f));
 			location.y -= 40;
 		}
-		SliderObj (container, location, new Vector2 (160, 10), Slider.Direction.LeftToRight, 100, 0, 100);
+		
+		
 	}
-//	void AddEventSystem(){
-//		GameObject eventSystem  = new GameObject("Event System", typeof(Transform));
-//		eventSystem.AddComponent<Touch>();
-//	}
 	GameObject AddInputField(GameObject go, Vector2 location, Vector2 size, Vector2 textLocation, Vector2 textSize, string placeholderText){
 		GameObject inputField = new GameObject ("Input Field", typeof(RectTransform));
 		inputField.transform.SetParent (go.transform, false);
-		AddImageComponant (inputField, Color.white, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
+
+		AddImageComponant (
+			inputField, 
+		    Color.white, "none", 
+			location, size, 
+			new Vector2(.5f, .5f), 
+			new Vector2(.5f, .5f));
+
 		InputField inputScript = inputField.AddComponent <InputField> ();
 
-		GameObject inputCaret = new GameObject ("Input Field Input Caret", typeof(RectTransform), typeof(CanvasRenderer));
+		AddInputCaret (
+			inputField, 
+			textLocation, textSize);
+
+		IFAddAndSetText (
+			inputField, inputScript, 
+			textLocation, textSize, 
+			placeholderText);
+
+		SetLayerRecursively (inputField, 5);
+
+		return inputField;
+	}
+	void IFAddAndSetText (GameObject go, InputField inputScript, Vector2 textLocation, Vector2 textSize,  string placeholderText){
+		Text placeHolderText = AddTextObjChild (
+			go, 0, 30, Color.grey, 
+			placeholderText, 
+			TextAnchor.MiddleLeft, 
+			textLocation, textSize, 
+			Vector2.zero, Vector2.one, 
+			"Place Holder Text");
+		Text inputText = AddTextObjChild(
+			go, 0, 30, Color.black, 
+		    "", TextAnchor.MiddleLeft,
+			textLocation, textSize, 
+			Vector2.zero, Vector2.one);
+		placeHolderText.fontStyle = FontStyle.Italic;
+		inputText.supportRichText = false;
+		
+		inputScript.textComponent = inputText;
+		inputScript.placeholder = placeHolderText;
+
+	}
+
+	GameObject AddInputCaret (GameObject go, Vector2 textLocation, Vector2 textSize){
+		GameObject inputCaret = new GameObject (
+			"Input Field Input Caret", 
+			typeof(RectTransform), 
+			typeof(CanvasRenderer));
 		LayoutElement layout = inputCaret.AddComponent<LayoutElement>();
-		inputCaret.transform.SetParent (inputField.transform, false);
+		inputCaret.transform.SetParent (go.transform, false);
 		layout.ignoreLayout = true;
 		RectTransform inputCaretRect = inputCaret.GetComponent<RectTransform>();
 		inputCaretRect.anchoredPosition = textLocation;
@@ -70,39 +153,48 @@ public class canvasControles : MonoBehaviour {
 		inputCaretRect.anchorMin = Vector2.zero;
 		inputCaretRect.anchorMax = Vector2.one;
 
-		Text placeHolderText = AddTextObjChild (inputField, 0, 30, Color.grey, placeholderText, TextAnchor.MiddleLeft, textLocation, textSize, Vector2.zero, Vector2.one, "Place Holder Text");
-		Text inputText = AddTextObjChild(inputField, 0, 30, Color.black, "", TextAnchor.MiddleLeft, textLocation, textSize, Vector2.zero, Vector2.one);
-		placeHolderText.fontStyle = FontStyle.Italic;
-		inputText.supportRichText = false;
-
-		inputScript.textComponent = inputText;
-		inputScript.placeholder = placeHolderText;
-
-		SetLayerRecursively (inputField, 5);
-
-		return inputField;
+		return inputCaret;
 	}
 
 	GameObject AddScrollArea(GameObject go, Vector2 location, Vector2 size, GameObject container, GameObject vScrollBar, Scrollbar hScrollBar=null){
 
+		ScrollRect sRect =null;
 
-		GameObject scrollArea = new GameObject ("Scroll Area", typeof(RectTransform));
-		scrollArea.transform.SetParent (go.transform, false);
-		ScrollRect sRect = scrollArea.AddComponent<ScrollRect>();
-		sRect.movementType = ScrollRect.MovementType.Clamped;
-		sRect.horizontal = false;
-		sRect.inertia = false;
-		AddImageComponant (scrollArea, Color.white, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
-		scrollArea.AddComponent<Mask>();
+		GameObject scrollArea = SetScrollArea(
+			go, ref sRect,
+			location,  size);
 
 		container.transform.SetParent (scrollArea.transform, false);
 
-		sRect.content=container.GetComponent<RectTransform>();
-		sRect.verticalScrollbar = vScrollBar.GetComponent<Scrollbar>();;
+		SetSRect (sRect, container, vScrollBar);
 
 		SetLayerRecursively (scrollArea, 5);
 
 		return scrollArea;
+	}
+
+	GameObject SetScrollArea(GameObject go, ref ScrollRect sRect, Vector2 location, Vector2 size){
+		GameObject scrollArea = new GameObject ("Scroll Area", typeof(RectTransform));
+		scrollArea.transform.SetParent (go.transform, false);
+		sRect = scrollArea.AddComponent<ScrollRect>();
+
+		AddImageComponant (
+			scrollArea, 
+			Color.white, "none", 
+			location, size, 
+			new Vector2(.5f, .5f), 
+			new Vector2(.5f, .5f));
+		scrollArea.AddComponent<Mask>();
+
+		return scrollArea;
+	}
+	void SetSRect(ScrollRect sRect, GameObject container, GameObject vScrollBar){
+		sRect.movementType = ScrollRect.MovementType.Clamped;
+		sRect.horizontal = false;
+		sRect.inertia = false;
+		sRect.content=container.GetComponent<RectTransform>();
+		sRect.verticalScrollbar = vScrollBar.GetComponent<Scrollbar>();
+
 	}
 
 	GameObject AddContainer(GameObject go, Vector2 location, Vector2 size){
@@ -116,39 +208,40 @@ public class canvasControles : MonoBehaviour {
 	}
 
 	GameObject AddScroleBar (GameObject go, Vector2 location, Vector2 size){
-		GameObject scrollBar  = new GameObject("Scroll Bar", typeof(RectTransform), typeof(CanvasRenderer));
-		AddImageComponant (scrollBar, Color.magenta, "none", location, size, new Vector2(.5f, .5f), new Vector2(.5f, .5f));
-		Scrollbar SBarAlt = scrollBar.AddComponent<Scrollbar>();
-		scrollBar.transform.SetParent(go.transform, false);
+		GameObject scrollBar = new GameObject ("Scroll Bar", typeof(RectTransform), typeof(CanvasRenderer));
+		AddImageComponant (scrollBar, Color.magenta, "none", location, size, new Vector2 (.5f, .5f), new Vector2 (.5f, .5f));
+		Scrollbar sBarAlt = scrollBar.AddComponent<Scrollbar> ();
+		scrollBar.transform.SetParent (go.transform, false);
 
-		GameObject slideArea = new GameObject("Slide Area", typeof(RectTransform));
-		slideArea.transform.SetParent (scrollBar.transform, false);
-		RectTransform slideAreaRect = slideArea.GetComponent<RectTransform>();
-		slideAreaRect.sizeDelta = new Vector2 (-20,-20);
-		slideAreaRect.anchorMin = new Vector2 (0,0);
-		slideAreaRect.anchorMax = new Vector2 (1, 1);
-		slideAreaRect.anchoredPosition = new Vector2(0, 0);
+		GameObject slideArea = AddSlideArea (scrollBar);
 
-		GameObject handle = new GameObject("Handle", typeof(CanvasRenderer));
+		GameObject handle = new GameObject ("Handle", typeof(CanvasRenderer));
 		AddImageComponant (handle, Color.blue, "Knob", Vector2.zero, new Vector2 (20, 20), new Vector2 (.8f, 0), Vector2.one);
 		handle.transform.SetParent (slideArea.transform, false);
 
-		SBarAlt.targetGraphic = handle.GetComponent<Image> ();
-		SBarAlt.handleRect = handle.GetComponent<RectTransform>();
-		SBarAlt.direction = Scrollbar.Direction.BottomToTop;
+		SetSBarAlt (sBarAlt, handle);
 
 		SetLayerRecursively (scrollBar, 5);
-
-	//	scrol
-	//	ScrollbarFunctionality (go, SBarAlt.onValueChanged);
-	//	SBarAlt.OnDrag(ScrollbarFunctionality(what, 3));
-	//	SBarAlt. //(ScrollbarFunctionality(go,3));
-	
 		
 		return scrollBar;
 	}
-	public void ScrollbarFunctionality(GameObject what, float howmuch){
-		Debug.Log ("here");
+	void SetSBarAlt (Scrollbar sBarAlt, GameObject handle){
+		sBarAlt.targetGraphic = handle.GetComponent<Image> ();
+		sBarAlt.handleRect = handle.GetComponent<RectTransform> ();
+		sBarAlt.direction = Scrollbar.Direction.BottomToTop;
+	}
+
+	GameObject AddSlideArea (GameObject go){
+		GameObject slideArea = new GameObject ("Slide Area", typeof(RectTransform));
+		slideArea.transform.SetParent (go.transform, false);
+		RectTransform slideAreaRect = slideArea.GetComponent<RectTransform> ();
+		slideAreaRect.sizeDelta = new Vector2 (-20, -20);
+		slideAreaRect.anchorMin = new Vector2 (0, 0);
+		slideAreaRect.anchorMax = new Vector2 (1, 1);
+		slideAreaRect.anchoredPosition = new Vector2 (0, 0);
+
+		return slideArea;
+
 	}
 
 	GameObject AddCanvas(){
@@ -185,35 +278,44 @@ public class canvasControles : MonoBehaviour {
 		sliderRect.sizeDelta = size;
 
 		GameObject background = new GameObject("Background", typeof(CanvasRenderer));
-		AddImageComponant (background, Color.white, "none", Vector2.zero, Vector2.zero, new Vector2(0,.25f), new Vector2(1, .75f), Image.Type.Sliced);
+		AddImageComponant (
+			background, Color.magenta, "none", 
+		    Vector2.zero, Vector2.zero, 
+		    new Vector2(0,.25f), new Vector2(1, .75f), 
+		    Image.Type.Sliced);
 		background.transform.SetParent (slider.transform, false);
 
-		GameObject fillArea = new GameObject("Fill Area", typeof(RectTransform));
-		fillArea.transform.SetParent (slider.transform, false);
-		RectTransform fillAreaRect = fillArea.GetComponent<RectTransform>();
-		fillAreaRect.sizeDelta = new Vector2 (-20,0);
-		fillAreaRect.anchorMin = new Vector2 (0,.25f);
-		fillAreaRect.anchorMax = new Vector2 (1, .75f);
-		fillAreaRect.anchoredPosition = new Vector2(-5f, 0);
+		GameObject fillArea = SetFillArea (
+			slider, "Fill Area",
+			new Vector2(-20,0), new Vector2(-5f,0), 
+			new Vector2(0,.25f), new Vector2(1,.75f));
 
 		GameObject fill = new GameObject("Fill", typeof(CanvasRenderer));
-		AddImageComponant (fill, Color.blue, "none", Vector2.zero, new Vector2(10,0), Vector2.zero, Vector2.one);
+		AddImageComponant (
+			fill, 
+			Color.blue, "none",
+			Vector2.zero, new Vector2(10,0), 
+			Vector2.zero, Vector2.one);
 		fill.transform.SetParent (fillArea.transform, false);
 
-		GameObject handleSlideArea = new GameObject("Handle Slide Area", typeof(RectTransform));
-		handleSlideArea.transform.SetParent (slider.transform, false);
-		RectTransform handleSlideAreaRect = handleSlideArea.GetComponent<RectTransform>();
-		handleSlideAreaRect.sizeDelta = new Vector2 (-20,0);
-		handleSlideAreaRect.anchorMin = new Vector2 (0,0);
-		handleSlideAreaRect.anchorMax = new Vector2 (1, 1);
-		handleSlideAreaRect.anchoredPosition = new Vector2(0, 0);
+		GameObject handleSlideArea = SetFillArea (
+			slider, "Handle Slide Area",
+			new Vector2(-20,0), new Vector2(0,0), 
+			new Vector2(0,0), new Vector2(1,1));
 
 		GameObject handle = new GameObject("Handle", typeof(CanvasRenderer));
-		AddImageComponant (handle, Color.green, "Knob", Vector2.zero, new Vector2 (20, 0), new Vector2 (1, 0), Vector2.one);
+		AddImageComponant (
+			handle, 
+			Color.green, "Knob", 
+			Vector2.zero, new Vector2 (20, 0), 
+			new Vector2 (1, 0), Vector2.one);
 		handle.transform.SetParent (handleSlideArea.transform, false);
 
-		SetLayerRecursively (slider, 5);
+		SetSliderAlt (sliderAlt, handle, fill, direction, maxSValue, minSValue, startValue);
 
+		SetLayerRecursively (slider, 5);
+	}
+	void SetSliderAlt(Slider sliderAlt, GameObject handle, GameObject fill, Slider.Direction direction, float maxSValue, float minSValue, float startValue){
 		sliderAlt.targetGraphic = handle.GetComponent<Image>();
 		sliderAlt.fillRect = fill.GetComponent<RectTransform> ();
 		sliderAlt.handleRect = handle.GetComponent<RectTransform>();
@@ -221,6 +323,17 @@ public class canvasControles : MonoBehaviour {
 		sliderAlt.maxValue = maxSValue;
 		sliderAlt.minValue = minSValue;
 		sliderAlt.value = startValue;
+	}
+	GameObject SetFillArea(GameObject go, string name, Vector2 size, Vector2 position, Vector2 anchorMin, Vector2 anchorMax){
+		GameObject fillArea = new GameObject(name, typeof(RectTransform));
+		fillArea.transform.SetParent (go.transform, false);
+		RectTransform fillAreaRect = fillArea.GetComponent<RectTransform>();
+		fillAreaRect.sizeDelta =  size;
+		fillAreaRect.anchorMin = anchorMin;
+		fillAreaRect.anchorMax =  anchorMax;
+		fillAreaRect.anchoredPosition = position;
+
+		return fillArea;
 	}
 	void AddImageComponant(GameObject go, Color colorS, string yourSprite, Vector2 position, Vector2 size, Vector2 anchorMin, Vector2 anchorMax, Image.Type imageType = Image.Type.Sliced){
 		Image image = go.AddComponent<Image>();
@@ -235,7 +348,11 @@ public class canvasControles : MonoBehaviour {
 	}
 	Text AddTextObjChild(GameObject go, int font, int fontSize, Color textColor, string textActual, TextAnchor textAnchor, Vector2 position, Vector2 size, Vector2 anchorMin, Vector2 anchorMax, string name = "Text"){
 		GameObject text = new GameObject (name, typeof(CanvasRenderer));
-		Text textC = AddTextComponent (text, font, fontSize, textColor, textActual, textAnchor, position, size, anchorMin, anchorMax);
+		Text textC = AddTextComponent (
+			text, font, fontSize, textColor,
+			textActual, textAnchor,
+			position, size,
+			anchorMin, anchorMax);
 		text.transform.SetParent(go.transform, false);
 		SetLayerRecursively (text, 5);
 
