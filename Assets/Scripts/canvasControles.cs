@@ -10,7 +10,7 @@ public class canvasControles : MonoBehaviour {
 
 	void Awake () {
 		OnReturn += AddUi;
-		canvas = AddCanvas ();
+		//canvas = AddCanvas ();
 		GameObject inputField = AddInputField 
 			(canvas, 				
 			 new Vector2 (0, 0), 

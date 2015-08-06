@@ -12,7 +12,7 @@ public class CanvasScale : MonoBehaviour {
 	float distance;
 	float lastDistance;
 	Vector3 followGame;
-	float del=0;
+	float del = 0;
 	Vector3 deltaUse= new Vector3 (0,0,0);
 	Vector3 rot = new Vector3(0,180,0);
 
@@ -22,6 +22,7 @@ public class CanvasScale : MonoBehaviour {
 
 	void Start(){
 		canvasRect = this.GetComponent <RectTransform> ();
+		del= transform.position.y;
 
 		lastDistance = Vector3.Distance (transform.position, target.position);
 	}
@@ -33,15 +34,15 @@ public class CanvasScale : MonoBehaviour {
 
 		distance = Vector3.Distance (transform.position, target.position);
 		delta = distance - lastDistance;
-		del += delta*.3f;
+		del += delta*.6f;
 
 		followGame = game.transform.position;
-		followGame.y += 5 + del;
+		followGame.y += del;
 		transform.position = followGame;
 
 
-		deltaUse.x = (delta*.0005f);
-		deltaUse.y = (delta*.0005f);
+		deltaUse.x = (delta*.002f);
+		deltaUse.y = (delta*.002f);
 	
 		canvasRect.localScale += deltaUse;
 		lastDistance = distance;
