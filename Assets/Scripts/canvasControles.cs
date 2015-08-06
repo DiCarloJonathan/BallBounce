@@ -5,8 +5,11 @@ using System.Collections;
 public class canvasControles : MonoBehaviour {
 	
 	public GameObject canvas;
+	public delegate void ReturnAction(GameObject inputField, int num);
+	public static event ReturnAction OnReturn;
 
 	void Awake () {
+		OnReturn += AddUi;
 		canvas = AddCanvas ();
 		GameObject inputField = AddInputField 
 			(canvas, 				
@@ -20,14 +23,14 @@ public class canvasControles : MonoBehaviour {
 	}
 	void GetInput (GameObject inputField){
 		InputField inputNumButtons = inputField.GetComponent <InputField> ();
-		inputNumButtons.onEndEdit.AddListener (val =>  DealWithInput(inputField, val));
+		inputNumButtons.onEndEdit.AddListener (val =>  DealWithInput(inputField, val, OnReturn));
 	}
-	void DealWithInput (GameObject inputField, string val){
+	void DealWithInput (GameObject inputField, string val, ReturnAction rA){
 		int value;
 		if (Input.GetKeyDown("return")){
 			if(int.TryParse(val, out value)){
-				inputField.SetActive(false);
-				AddUi((int)value);
+			//	inputField.SetActive(false);
+				rA(inputField,(int)value);
 			}
 			else{
 				print(val+" is not a number");
@@ -36,7 +39,8 @@ public class canvasControles : MonoBehaviour {
 		}
 	}
 	
-	void AddUi(int numButtons){
+	void AddUi(GameObject inputField, int numButtons){
+		inputField.SetActive(false);
 		Vector3 location = new Vector3 (0, 0, 0);
 		int scrollWindowH = 350;
 		float containerHight;
